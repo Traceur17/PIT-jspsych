@@ -20,6 +20,9 @@
 </head>
 <body>
     <script>
+		var correct = 0;
+		var acc = 0;
+	
 		//获取随机数
 		function getRandomInteger(min, max) {
 		  return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -28,14 +31,16 @@
 		var jsPsych = initJsPsych({
 			//timeline: timeline,
 			on_finish: function() {
+				acc = correct/80;
+				console.log('正确率 = ', acc);
 				jsPsych.data.displayData('csv');
 			}
 		});
-        // 创建实验时间轴
-        var timeline = [];
+		// 创建实验时间轴
+		var timeline = [];
 
 		//全屏模式
-        var open_fullscreen = {   
+		var open_fullscreen = {   
 			type: jsPsychFullscreen,   
 			fullscreen_mode: true,
 			message: '<p style="font: 16pt 微软雅黑; text-align: left; line-height: 1.6em">'+
@@ -53,7 +58,6 @@
 
 			button_label: '点击这里全屏开始',
 			delay_after: 100
-
 		}
 
 		timeline.push(open_fullscreen);
@@ -75,85 +79,115 @@
 		
 		var start = {
 			type: jsPsychHtmlKeyboardResponse,
-            stimulus: '<img src = "sources/intro11.png">',
+			stimulus: '<img src = "sources/intro11.png">',
 			choices: 'NO_KEYS',
 			trial_duration: 2000
 		};
 		timeline.push(start);
 		
 		 // 定义反馈函数
-		function getFeedback() {
-			var feedbackOptions = [
-				{feedback: 'Great job!', probability: 0.5},
-				{feedback: 'Well done!', probability: 0.3},
-				{feedback: 'Keep going!', probability: 0.2}
+		function getFeedback(label, response) {
+			var win_c = [
+				{feedback: '<img src = "sources/rew.png">', probability: 0.8},
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.2}
+			];
+			
+			var win_unc = [
+				{feedback: '<img src = "sources/rew.png">', probability: 0.2},
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.8}
+			];
+			
+			var avoid_c = [
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.8},
+				{feedback: '<img src = "sources/pun.png">', probability: 0.2}
+			];
+			
+			var avoid_unc = [
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.2},
+				{feedback: '<img src = "sources/pun.png">', probability: 0.8}
 			];
 
 			var cumulativeProbability = 0;
 			var randomValue = Math.random();
 
-			for (var i = 0; i < feedbackOptions.length; i++) {
-				cumulativeProbability += feedbackOptions[i].probability;
-				if (randomValue < cumulativeProbability) {
-				  return feedbackOptions[i].feedback;
-				}
+			if (label.includes('W')){
+				if ((response == null && label.includes('N')) || (response == 'arrowleft' && label.includes('L')) || (response == 'arrowright' && label.includes('R'))){
+					fb = win_c;
+					correct++;
+				}else fb = win_unc;
+			}else {
+				if ((response == null && label.includes('N')) || (response == 'arrowleft' && label.includes('L')) || (response == 'arrowright' && label.includes('R'))){
+					fb = avoid_c;
+					correct++;
+				}else fb = avoid_unc;
 			}
+				
+			for (var i = 0; i < fb.length; i++) {
+				cumulativeProbability += fb[i].probability;
+				if (randomValue < cumulativeProbability) {
+				  return fb[i].feedback;
+				}
+			}			
 		}
 
-        // 定义主实验
-        var block = [];
-		var trial = [[]];
+		// 定义主实验
+		var block = [];
 		var rep = 5;
-		var stimu = [1,2,4,3];
+		var stimu = [
+			{st: '<img src = "sources/win1.png">', label:'W-G-L'},
+			{st: '<img src = "sources/win2.png">', label:'W-G_R'},
+			{st: '<img src = "sources/win3.png">', label:'W-N'},
+			{st: '<img src = "sources/win4.png">', label:'W-N'},
+			{st: '<img src = "sources/loss1.png">', label:'A-G-L'},
+			{st: '<img src = "sources/loss2.png">', label:'A-G-R'},
+			{st: '<img src = "sources/loss3.png">', label:'A-N'},
+			{st: '<img src = "sources/loss4.png">', label:'A-N'}
+		];
 		var fixation = 'sources/resize注视点.png';
 		for(var t=0; t< rep; t++){
-			var base = t*stimu.length;
 			for(var i=0; i<stimu.length; i++){
-				trial.push([]);
-				var n=base+i;
+				var trial = [];
 				// 展示刺激
-				trial[n].push({
+				trial.push({
 					type: jsPsychHtmlKeyboardResponse,
-					stimulus: '<img src = "source/' + stimu[i] + '">',
+					stimulus: stimu[i].st,
 					trial_duration: 1300,
-					choices: ['arrowleft', 'arrowright']
+					choices: ['arrowleft', 'arrowright'],
+					data: {label:stimu[i].label}
 				});
 				//注视点
-				trial[n].push({
+				trial.push({
 					type: jsPsychHtmlKeyboardResponse,
 					stimulus: '<img src = "' + fixation + '">',
 					trial_duration: getRandomInteger(1400, 2600),
 					choices: 'NO_KEYS'
 				});
 				//反馈
-				trial[n].push({
+				trial.push({
 					type: jsPsychHtmlKeyboardResponse,
 					stimulus:  function() {
-						var last_response = jsPsych.data.get().last(1).values()[0].response;
-						if (last_response === 'arrowleft') {
-						  return getFeedback();
-						} else if (last_response === 'arrowright') {
-						  return getFeedback();
-						} else {
-						  return getFeedback();
-						}
+						var last_data = jsPsych.data.get().last(2).values()[0];
+						return getFeedback(last_data.label, last_data.response);
 					 },
 					trial_duration:750,
 					choices: 'NO_KEYS'
 				});
 				//注视点 ITI
-				trial[n].push({
+				trial.push({
 					type: jsPsychHtmlKeyboardResponse,
 					stimulus: '<img src = "' + fixation + '">',
 					trial_duration:getRandomInteger(1250, 2000),
 					choices: 'NO_KEYS'
 				});
-				block.push(trial[n]);
+				block.push({
+					timeline: trial
+				});
 			};
 		};
-        timeline.push({
-			timeline: jsPsych.randomization.shuffle(block),
-			repeatitions: 3
+		block = jsPsych.randomization.shuffle(block)
+		timeline.push({
+			timeline: block,
+			repetitions: 2
 		});
 		
 		var judgment_trials = {
@@ -170,29 +204,29 @@
 		
 		//水平移动动画
 		var animation_trial = {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
-                return '<div id="animation-container" style="width: 100px; height: 100px; background-color: red;"></div>';
-            },
-            choices: "NO_KEYS",
-            trial_duration: 2000, // 动画持续时间 (ms)
-            on_load: function() {
-                var container = document.getElementById('animation-container');
-                var start = null;
-                function step(timestamp) {
-                    if (!start) start = timestamp;
-                    var progress = timestamp - start;
-                    container.style.transform = 'translateY(-' + Math.min(progress / 10, 100) + 'px)';
-                    if (progress < 2000) {
-                        window.requestAnimationFrame(step);
-                    }
-                }
-                window.requestAnimationFrame(step);
-            },
-            on_finish: function() {
-                jsPsych.data.displayData('json');
-            }
-        };
+			type: jsPsychHtmlKeyboardResponse,
+			stimulus: function() {
+				return '<div id="animation-container" style="width: 100px; height: 100px; background-color: red;"></div>';
+			},
+			choices: "NO_KEYS",
+			trial_duration: 2000, // 动画持续时间 (ms)
+			on_load: function() {
+				var container = document.getElementById('animation-container');
+				var start = null;
+				function step(timestamp) {
+					if (!start) start = timestamp;
+					var progress = timestamp - start;
+					container.style.transform = 'translateY(-' + Math.min(progress / 10, 100) + 'px)';
+					if (progress < 2000) {
+						window.requestAnimationFrame(step);
+					}
+				}
+				window.requestAnimationFrame(step);
+			},
+			on_finish: function() {
+				jsPsych.data.displayData('json');
+			}
+		};
 		timeline.push(animation_trial);
 		
 
@@ -222,7 +256,7 @@
 		};
 		timeline.push(quitFullscreenMode)
 		
-        // 初始化并启动实验
+		// 初始化并启动实验
 		jsPsych.run(timeline);
     </script>
 </body>
