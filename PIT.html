@@ -110,24 +110,6 @@
 
 		timeline.push(open_fullscreen);
 		
-		// 自定义验证函数
-        function validateSurvey(response) {
-            var errors = {};
-            // 验证姓名
-            if (!response.name || response.name.trim() === "") {
-                errors.name = "姓名不能为空";
-            }
-            // 验证年龄
-            if (!response.age || !/^\d+$/.test(response.age)) {
-                errors.age = "年龄必须是数字";
-            }
-            // 验证性别
-            if (!response.gender || !["男", "女"].includes(response.gender)) {
-                errors.gender = "性别必须是'男'或'女'";
-            }
-            return errors;
-        }
-		
 	 	// 录入个人信息
 		var survey= {
             type: jsPsychSurvey,
@@ -208,6 +190,13 @@
 			],
 			button_label_next: "继续",
 			button_label_previous: "返回",
+			//指导语呈现完毕，鼠标消失
+			on_finish: function () {
+				var bodyNode = document.getElementsByTagName("body");
+				for (let i = 0; i < bodyNode.length; i++) {
+					bodyNode[i].style.cursor = "none";
+				}
+			},
 			show_clickable_nav: true
 		}
 		
@@ -273,11 +262,11 @@
 				  return fb[i].feedback;
 				}
 			}			
-		}
+		}		
 
 		// 定义主实验
 		var block = [];
-		var rep = 5;
+		var rep = 1;
 		var stimu = [
 			{st: '<img src = "sources/win1.png">', label:'W-G-L'},
 			{st: '<img src = "sources/win2.png">', label:'W-G_R'},
@@ -339,6 +328,13 @@
             questions: [
                 {prompt: '休息时间。你想要休息多久？', labels: ['10秒', '30秒', '1分钟', '1分30秒', '2分钟'], required: true}
             ],
+			//选择休息时间，鼠标出现
+			on_start: function () {
+				var bodyNode = document.getElementsByTagName("body");
+				for (let i = 0; i < bodyNode.length; i++) {
+					bodyNode[i].style.cursor = "default";
+				}
+			},
 			scale_width: 500,
 			button_label: '继续'
         };
@@ -381,7 +377,14 @@
 				} 
                 var display = document.querySelector('#countdown-timer');
                 startCountdown(clock, display);
-            }
+            },
+			//休息结束，鼠标消失
+			on_finish: function () {
+				var bodyNode = document.getElementsByTagName("body");
+				for (let i = 0; i < bodyNode.length; i++) {
+					bodyNode[i].style.cursor = "none";
+				}
+			}
         };
 
         timeline.push(countdown_trial);
@@ -393,7 +396,7 @@
 		}); 
 		
 		
-		// 迁移部分
+		// 迁移部分说明
 		var trans_intro = {
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus:'<img src="sources/trans.png">',
@@ -401,8 +404,9 @@
 		}
 		timeline.push(trans_intro);
 		
+		//迁移试次
 		var trans_line = [];
-		for (var i=1; i<=48; i++){
+		for (var i=1; i<=4; i++){
 			var trans = {
 				type: jsPsychHtmlKeyboardResponse,
 				stimulus: '<img src="sources/幻灯片' + i + '.PNG">',
@@ -461,10 +465,11 @@
 		var quitFullscreenMode = {
 			type: jsPsychFullscreen,
 			fullscreen_mode: false,
+			//全部结束，鼠标出现
 			on_finish: function () {
 				var bodyNode = document.getElementsByTagName("body");
 				for (let i = 0; i < bodyNode.length; i++) {
-					bodyNode[i].style.cursor = "none";
+					bodyNode[i].style.cursor = "default";
 				}
 			}
 		};
