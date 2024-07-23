@@ -14,13 +14,56 @@
 	<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css">
 	<style>
 		body {
-		  background-color: #A6A6A6; /* 设置全局背景颜色 */
-		}
+            background-color: #A6A6A6;
+        }
 		/*设置图片适应屏幕*/
 		img {
 		  max-width: 100%;
 		  height: auto;
 		}
+        .container {
+			display:flex;
+			justify-content: space-evenly;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+			height: 400px;
+        }
+        .title {
+            font-size: 24px;
+            color: #333;
+        }
+        .score {
+            font-size: 48px;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+        .message {
+            font-size: 18px;
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
   </style>
 </head>
 <body>
@@ -99,29 +142,20 @@
                         min: 0,
                         max: 300,
                         defaultValue: 0,
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     },
                     {
                         type: 'text',
                         title: '姓名',
                         name: 'name',
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     },
                     {
                         type: 'radiogroup',
                         title: "性别",
                         name: 'sex',
                         choices: ['男', '女'],
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     },
 					{
                         name: "age",
@@ -131,10 +165,7 @@
                         min: 0,
                         max: 100,
                         defaultValue: null,
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     },
                     {
                         type: 'text',
@@ -146,10 +177,7 @@
                             regex: '[0-9]{11}',
                             text: '请输入正确的手机号'
                         }],
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     },
                     {
                         type: 'dropdown',
@@ -159,15 +187,9 @@
                         choices: ['小学', '初中', '高中', '本科', '研究生', '博士'],
                         showOtherItem: false,
                         showNoneItem: false,
-                        isRequired: true,
-                        cssClasses: {
-                            root: 'flex-item'
-                        }
+                        isRequired: true
                     }
                 ],
-                cssClasses: {
-                    mainRoot: 'flex-container'
-                },
 				completeText: '完成'
             }
         };
@@ -207,25 +229,26 @@
 		timeline.push(start);
 		
 		// 定义反馈函数
+		var final_score = 100;
 		function getFeedback(label, response) {
 			var win_c = [
-				{feedback: '<img src = "sources/rew.png">', probability: 0.8},
-				{feedback: '<img src = "sources/neutral.png">', probability: 0.2}
+				{feedback: '<img src = "sources/rew.png">', probability: 0.8, score: 10},
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.2, score: 0}
 			];
 			
 			var win_unc = [
-				{feedback: '<img src = "sources/neutral.png">', probability: 0.8},
-				{feedback: '<img src = "sources/rew.png">', probability: 0.2}
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.8, score: 0},
+				{feedback: '<img src = "sources/rew.png">', probability: 0.2, score: 10}
 			];
 			
 			var avoid_c = [
-				{feedback: '<img src = "sources/neutral.png">', probability: 0.8},
-				{feedback: '<img src = "sources/pun.png">', probability: 0.2}
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.8, score: 0},
+				{feedback: '<img src = "sources/pun.png">', probability: 0.2, score: -10}
 			];
 			
 			var avoid_unc = [
-				{feedback: '<img src = "sources/pun.png">', probability: 0.8},
-				{feedback: '<img src = "sources/neutral.png">', probability: 0.2}
+				{feedback: '<img src = "sources/pun.png">', probability: 0.8, score: -10},
+				{feedback: '<img src = "sources/neutral.png">', probability: 0.2, score: 0}
 			];
 
 			var cumulativeProbability = 0;
@@ -246,6 +269,7 @@
 			for (var i = 0; i < fb.length; i++) {
 				cumulativeProbability += fb[i].probability;
 				if (randomValue < cumulativeProbability) {
+					final_score += fb[i].score;
 				  return fb[i].feedback;
 				}
 			}			
@@ -331,7 +355,7 @@
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                display.textContent = minutes + ":" + seconds;
+                display.textContent = minutes + " : " + seconds;
 
                 if (--timer < 0) {
                     clearInterval(interval);
@@ -339,10 +363,10 @@
             }, 1000);
         }
 
-        // 定义一个包含倒计时的试验
+        // 休息倒计时
         var countdown_trial = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: '<div id="countdown-timer">--:--</div><p>请按任意键继续...</p>',
+            stimulus: '<div id="countdown-timer">-- : --</div><p>请按任意键继续...</p>',
             choices: 'ALL_KEYS',
             on_load: function() {
                 // 开始倒计时
@@ -362,6 +386,7 @@
 
         timeline.push(countdown_trial);
 		
+		// 进行第二个block
 		block = jsPsych.randomization.shuffle(block)
 		timeline.push({
 			timeline: block
@@ -377,7 +402,7 @@
 		timeline.push(trans_intro);
 		
 		var trans_line = [];
-		for (var i=1; i<=48; i++){
+		for (var i=1; i<=2; i++){
 			var trans = {
 				type: jsPsychHtmlKeyboardResponse,
 				stimulus: '<img src="sources/幻灯片' + i + '.PNG">',
@@ -415,22 +440,22 @@
 				jsPsych.data.displayData('json');
 			}
 		};
-		timeline.push(animation_trial);
+		//timeline.push(animation_trial);
 		
-		//TODO 最终积分
-
-		//结束指导语
-		var end_intro = {
-			type: jsPsychHtmlKeyboardResponse,
-			stimulus: '<p style="font: bold 32pt 微软雅黑; color: #B22222">'+
-			'实验结束，感谢您的参与！</p>'+
-			'<p style="font: 20pt 微软雅黑; color: black"><br/>'+
-			'<按任意格键退出全屏模式></p>'+
-			'</p>',
-			choices: 'ALL_KEYS',
-			post_trial_gap: 100
-		}
-		timeline.push(end_intro)
+		//最终积分
+        var show_score_trial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
+                return '<div class="container">' +
+                    '<div class="title">实验结束</div>' +
+                    '<div class="score">你的积分: ' + final_score + '</div>' +
+                    '<div class="message">感谢你的参与！</div>' +
+                    '</div>';
+            },
+            choices: 'k'
+			//trial_duration: 3000
+        };
+		timeline.push(show_score_trial);
 		
 		//退出全屏模式
 		var quitFullscreenMode = {
