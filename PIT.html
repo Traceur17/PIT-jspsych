@@ -120,8 +120,6 @@
 				downloadData(data, subjectID + '.csv');
 			}
 		});
-		// 创建实验时间轴
-		var timeline = [];
 
 		//全屏模式
 		var open_fullscreen = {   
@@ -144,7 +142,6 @@
 			delay_after: 100
 		}
 
-		timeline.push(open_fullscreen);
 		
 	
 		//获取随机数
@@ -218,7 +215,6 @@
             }
         };
 
-        timeline.push(survey);
 		
 		
 		//练习部分
@@ -242,14 +238,12 @@
 			show_clickable_nav: true
 		}
 		
-		timeline.push(instruct);
 		
 		var confirm = {
 			type: jsPsychHtmlKeyboardResponse,
 			stimulus:'<img src="sources/' + introimg[2] + '">',
 			choices: [' ']
 		}
-		timeline.push(confirm);
 		
 		var start = {
 			type: jsPsychHtmlKeyboardResponse,
@@ -257,7 +251,7 @@
 			choices: 'NO_KEYS',
 			trial_duration: 2000
 		};
-		timeline.push(start);
+		
 		
 		// 定义反馈函数
 		var final_score = 100;
@@ -361,9 +355,7 @@
 			};
 		};
 		block = jsPsych.randomization.shuffle(block)
-		timeline.push({
-			timeline: block
-		});
+	
 		
 		var rest = {
             type: jsPsychSurveyLikert,
@@ -381,7 +373,6 @@
 			button_label: '继续'
         };
 		
-		timeline.push(rest);
 		
 		// 倒计时函数
         function startCountdown(duration, display) {
@@ -429,13 +420,9 @@
 			}
         };
 
-        timeline.push(countdown_trial);
 		
 		// 进行第二个block
-		block = jsPsych.randomization.shuffle(block)
-		timeline.push({
-			timeline: block
-		}); 
+		var block2 = jsPsych.randomization.shuffle(block)
 		
 		
 		// 迁移部分说明
@@ -444,7 +431,6 @@
 			stimulus:'<img src="sources/trans.png">',
 			choices: [' ']
 		}
-		timeline.push(trans_intro);
 		
 		//迁移试次
 		var trans_line = [];
@@ -457,9 +443,7 @@
 			trans_line.push(trans);
 		}
 		trans_line = jsPsych.randomization.shuffle(trans_line);
-		timeline.push({
-			timeline: trans_line
-		});
+
 		
 		//水平移动动画
 		var animation_trial = {
@@ -486,7 +470,6 @@
 				jsPsych.data.displayData('json');
 			}
 		};
-		//timeline.push(animation_trial);
 		
 		//最终积分
         var show_score_trial = {
@@ -501,7 +484,6 @@
             choices: 'k'
 			//trial_duration: 3000
         };
-		timeline.push(show_score_trial);
 		
 		//退出全屏模式
 		var quitFullscreenMode = {
@@ -515,10 +497,51 @@
 				}
 			}
 		};
+		
+		
+		
+		// 创建实验时间轴
+		var timeline = [];
+		
+		// 进入全屏模式
+		timeline.push(open_fullscreen);
+		
+		// 录入个人信息
+		timeline.push(survey);
+		
+		// 指导语
+		timeline.push(instruct);
+		timeline.push(confirm);
+		
+		// 开始界面
+		timeline.push(start);
+		
+		// 第一个block
+		timeline.push({timeline: block});
+		
+		// 休息时间选择并倒计时
+		timeline.push(rest);
+		timeline.push(countdown_trial);
+		
+		// 第二个block
+		timeline.push({timeline: block2});
+		
+		// 迁移部分
+		timeline.push(trans_intro);
+		timeline.push({timeline: trans_line});
+		
+		//timeline.push(animation_trial);
+		
+		// 展示积分
+		timeline.push(show_score_trial);
+		
+		// 推出全屏
 		timeline.push(quitFullscreenMode)
 		
 		// 初始化并启动实验
 		jsPsych.run(timeline);
+		
+		//TODO 配置文件
     </script>
 </body>
 </html>
