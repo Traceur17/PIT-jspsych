@@ -14,7 +14,6 @@
 	
 	
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
-	<link href="css/custom.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css">
 </head>
 <body>
@@ -229,7 +228,7 @@
 
 		// 定义主实验
 		var block = [];
-		var rep = 1;
+		var rep = 5;
 		var stimu = [
 			{st: '<img src = "sources/win1.png">', label:'W-G-L'},
 			{st: '<img src = "sources/win2.png">', label:'W-G_R'},
@@ -467,8 +466,7 @@
 		
 		// 初始化并启动实验
 		jsPsych.run(timeline);
-		
-		//TODO 配置文件
+
     </script>
 </body>
 </html>
