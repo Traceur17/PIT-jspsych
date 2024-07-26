@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PIT by JsPsych</title>
+    <title>PIT by jsPsych</title>
     <script src="https://unpkg.com/jspsych@7.3.4"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
 	<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
@@ -12,9 +12,11 @@
 	<script src="https://unpkg.com/@jspsych/plugin-survey@1.0.1"></script>
 	<script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
 	
-	
+	<link rel="icon" href="sources/icon.png" type="image/png">
     <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
+	<link href="css/custom.css" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css">
+	
 </head>
 <body>
     <script>
@@ -146,10 +148,22 @@
 		//练习部分
 		//指导语呈现
 		var introimg = ['intro2.png', 'intro3.png', 'intro4.png'];
+		var jewels = ['image1.png','image2.png','image3.png','image4.png','image5.png','image6.png','image7.png','image8.png'];
+		jewels = jsPsych.randomization.shuffle(jewels);
 		var instruct = {
 			type: jsPsychInstructions,
 			pages: [
 			'<img src="sources/' + introimg[0] + '">',
+			' <div class="jewel-container">'+
+				'<div class="image-item"><img src="sources/' + jewels[0] + '" alt="Image 1"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[1] + '" alt="Image 2"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[2] + '" alt="Image 3"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[3] + '" alt="Image 4"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[4] + '" alt="Image 5"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[5] + '" alt="Image 6"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[6] + '" alt="Image 7"></div>'+
+				'<div class="image-item"><img src="sources/' + jewels[7] + '" alt="Image 8"></div>'+
+			'</div>',
 			'<img src="sources/' + introimg[1] + '">'
 			],
 			button_label_next: "继续",
@@ -360,7 +374,7 @@
 		
 		//迁移试次
 		var trans_line = [];
-		for (var i=1; i<=4; i++){
+		for (var i=1; i<=48; i++){
 			var trans = {
 				type: jsPsychHtmlKeyboardResponse,
 				stimulus: '<img src="sources/幻灯片' + i + '.PNG">',
