@@ -1,15 +1,17 @@
 
 
+
 # PIT By jsPsych 实验设计说明文档
 
 
 ## 目录 
-- [实验简介](#一实验简介) 
-- [实验内容](#实验内容) 
-- [操作步骤](#三操作步骤)
-- [获得实验数据](#获得实验数据) 
-- [特点](#特点)
-- [参考文献](#参考文献)
+- [一、实验简介](#一实验简介) 
+- [二、实验内容](#二实验内容) 
+- [三、操作步骤](#三操作步骤)
+- [四、获得实验数据](#四获得实验数据) 
+- [五、特点](#五特点)
+- [六、实验修改指导](#六实验修改指导)
+- [七、参考文献](#七参考文献)
 
 
 ## 一、实验简介
@@ -18,7 +20,7 @@
 
 ![(Algermissen等, 2024)](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/reference.png)
 
-## 实验内容
+## 二、实验内容
 
 1.  **个人信息录入**
     
@@ -82,11 +84,11 @@
 
 实验结束后，系统将自动退出全屏模式，鼠标指针重新出现。
 
-## 获得实验数据
+## 四、获得实验数据
 
 实验结束后，系统会自动下载实验数据的CSV文件，文件名为参与者的编号。文件包含所有的实验数据，供后续分析使用。
 
-## 特点
+## 五、特点
 |特点| 介绍 |
 |--|--|
 | 全屏 | 在实验开始进入全屏模式，结束后退出全屏，避免实验过程干扰 |
@@ -97,6 +99,35 @@
 | 插件丰富 | 本实验中运用了许多jsPsych插件，如问卷，引导语，全屏，按键反应等 |
 | 数据 | 在实验结束，会自动将实验数据以csv格式下载，并用被试编号命名，以供后续分析 |
 
-## 参考文献
+## 六、实验修改指导
+
+> 本部分将帮助不懂jsPsych的用户进行实验的修改。
+
+
+### 1. trial重复次数
+
+实验中刺激呈现的重复次数由变量 `rep` 控制。你可以通过修改该变量来调整实验的重复次数。
+
+```javascript
+var rep = 5; // 将5修改为你需要的重复次数
+```
+### 2.实验内容增删及顺序调整
+实验的内容由变量timeline进行控制，对应的代码在<a href="https://github.com/Traceur17/PIT-jspsych/blob/main/PIT.html">PIT.html</a>第` 443-479`行。
+
+例如想要增加一个block，则执行
+```javascript
+timeline.push({timeline: block});
+```
+如果想要将某个部分`xxx`去除，则将对应的`timeline.push(xxx)`注释或者删去。
+```javascript
+在代码前加上//，进行注释
+//timeline.push(animation_trial);
+```
+实验的执行顺序由`timeline.push()`的顺序决定，可通过调整代码顺序从而调整实验内容的顺序。
+
+### 3.修改样式
+本实验的样式文件在目录`/css`的文件<a href='https://github.com/Traceur17/PIT-jspsych/blob/main/css/custom.css'>custom.css</a>中，可根据需要修改样式，若无必要，也可以不做改动。
+
+## 七 、参考文献
 
 > Algermissen, J., Swart, J. C., Scheeringa, R., Cools, R., & Den Ouden, H. E. M. (2024). Prefrontal signals precede striatal signals for biased credit assignment in motivational learning biases. _Nature Communications_, _15_(1), 19. [https://doi.org/10.1038/s41467-023-44632-x](https://doi.org/10.1038/s41467-023-44632-x)
