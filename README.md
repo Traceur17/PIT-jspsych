@@ -6,11 +6,11 @@
 
 ## ⭐⭐⭐简单体验
 
-> 如果想要简单体验实验程序，可以将<a href="https://github.com/Traceur17/PIT-jspsych/blob/main/PIT.html">PIT.html</a>中第`27-29`行的参数进行修改。
+> 如果想要简单体验实验程序，可以将<a href="https://github.com/Traceur17/PIT-jspsych/blob/main/PIT.html">PIT.html</a>中第`27-29`行的参数进行修改，然后用浏览器打开该HTML文件。
 >![可修改的参数](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/params_to_change.png)
 
 ## 目录 
-- [一、实验简介](#一实验简介📕) 
+- [一、实验简介](#一实验简介) 
 - [二、实验内容](#二实验内容) 
 - [三、操作步骤](#三操作步骤)
 - [四、获得实验数据](#四获得实验数据) 
@@ -19,7 +19,7 @@
 - [七、参考文献](#七参考文献)
 
 
-## 一、实验简介📕
+## 一、实验简介 📕
 
 本实验旨在通过一系列的视觉刺激和用户反馈来评估参与者的反应速度和准确性。本实验范式参考自文献 **(Algermissen等, 2024)**。实验包括两部分：第一部分是主要的实验任务，第二部分是迁移任务。实验结束后，系统将生成一个包含实验数据的CSV文件，供后续分析使用。
 
