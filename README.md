@@ -1,11 +1,16 @@
 
 
 
+
 # PIT By jsPsych 实验设计说明文档
 
+## ⭐⭐⭐简单体验
+
+> 如果想要简单体验实验程序，可以将<a href="https://github.com/Traceur17/PIT-jspsych/blob/main/PIT.html">PIT.html</a>中第`27-29`行的参数进行修改。
+>![可修改的参数](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/params_to_change.png)
 
 ## 目录 
-- [一、实验简介](#一实验简介) 
+- [一、实验简介](#一实验简介📕) 
 - [二、实验内容](#二实验内容) 
 - [三、操作步骤](#三操作步骤)
 - [四、获得实验数据](#四获得实验数据) 
@@ -14,7 +19,7 @@
 - [七、参考文献](#七参考文献)
 
 
-## 一、实验简介
+## 一、实验简介📕
 
 本实验旨在通过一系列的视觉刺激和用户反馈来评估参与者的反应速度和准确性。本实验范式参考自文献 **(Algermissen等, 2024)**。实验包括两部分：第一部分是主要的实验任务，第二部分是迁移任务。实验结束后，系统将生成一个包含实验数据的CSV文件，供后续分析使用。
 
@@ -78,15 +83,19 @@
 
 ### 7. 查看最终积分
 
-实验结束后，系统将显示最终积分，并生成实验数据的CSV文件。
+实验结束后，系统将显示最终积分。
+
+![最终积分](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/final_score.png)
 
 ### 8. 退出全屏模式
 
-实验结束后，系统将自动退出全屏模式，鼠标指针重新出现。
+实验结束后，系统将自动退出全屏模式，鼠标指针重新出现。并自动生成和下载实验数据的CSV文件。
 
 ## 四、获得实验数据
 
 实验结束后，系统会自动下载实验数据的CSV文件，文件名为参与者的编号。文件包含所有的实验数据，供后续分析使用。
+![数据下载](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/data_csv.png)
+![数据样本](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/data_detail.png)
 
 ## 五、特点
 |特点| 介绍 |

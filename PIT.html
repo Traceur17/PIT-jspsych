@@ -23,6 +23,11 @@
 		var correct = 0;
 		var acc = 0;
 		
+		
+		//如果想要看实验的大致流程，简单体验，可以将rep修改为1，trans_length修改为4
+		var rep = 5;
+		var trans_length = 48;
+		
 		function downloadData(data, filename) {
             var blob =  new Blob(["\ufeff", data], { type: 'text/csv;charset=utf-8;' });
             var url = window.URL.createObjectURL(blob);
@@ -242,7 +247,6 @@
 
 		// 定义主实验
 		var block = [];
-		var rep = 5;
 		var stimu = [
 			{st: '<img src = "sources/win1.png">', label:'W-G-L'},
 			{st: '<img src = "sources/win2.png">', label:'W-G_R'},
@@ -374,7 +378,7 @@
 		
 		//迁移试次
 		var trans_line = [];
-		for (var i=1; i<=48; i++){
+		for (var i=1; i<=trans_length; i++){
 			var trans = {
 				type: jsPsychHtmlKeyboardResponse,
 				stimulus: '<img src="sources/幻灯片' + i + '.PNG">',
@@ -421,8 +425,8 @@
                     '<div class="message">感谢你的参与！</div>' +
                     '</div>';
             },
-            choices: 'k'
-			//trial_duration: 3000
+            choices: 'k',
+			trial_duration: 5000
         };
 		
 		//退出全屏模式
@@ -475,7 +479,7 @@
 		// 展示积分
 		timeline.push(show_score_trial);
 		
-		// 推出全屏
+		// 退出全屏
 		timeline.push(quitFullscreenMode)
 		
 		// 初始化并启动实验
