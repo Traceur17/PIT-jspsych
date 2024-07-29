@@ -19,7 +19,7 @@
 - [七、参考文献](#七参考文献)
 
 
-## 一、实验简介 📕
+## 一、实验简介
 
 本实验旨在通过一系列的视觉刺激和用户反馈来评估参与者的反应速度和准确性。本实验范式参考自文献 **(Algermissen等, 2024)**。实验包括两部分：第一部分是主要的实验任务，第二部分是迁移任务。实验结束后，系统将生成一个包含实验数据的CSV文件，供后续分析使用。
 
@@ -94,7 +94,9 @@
 ## 四、获得实验数据
 
 实验结束后，系统会自动下载实验数据的CSV文件，文件名为参与者的编号。文件包含所有的实验数据，供后续分析使用。
+
 ![数据下载](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/data_csv.png)
+
 ![数据样本](https://github.com/Traceur17/PIT-jspsych/blob/main/sources/data_detail.png)
 
 ## 五、特点
